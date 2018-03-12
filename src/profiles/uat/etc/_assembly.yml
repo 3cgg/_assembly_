@@ -1,0 +1,61 @@
+cpp :
+    name : uat
+    security-key : _you_@never@_known@aha_3cgg@163.com_
+    auth.authentication : true
+    auth.authorization : true
+    jwt :
+         secret : jiazhongjin
+         expiration : 3600000000 #milliseconds  ; long long time , only for developing
+         header : _token
+    ehcache :
+         name : dev
+    redis :
+         expired-time : 120  #seconds
+         redis-off-proxy : true
+    thread :
+         name : ''
+         alive-count : 3
+         max-count : 9
+         alive-time : 3600 # seconds
+    es5x6 :
+         addresses : {"[192.168.93.128]" : 9200}
+         headers : {"es-request-indicator" : J}
+         userName : elastic
+         password : changeme
+         timeout : 90 # seconds
+    mongo :
+         primary-key : uniqueId
+         deleted-key : deleted
+         invalid-Keys :
+              - _id
+              - id
+              - _class
+              - class
+    user :
+         default-password : 11111
+    file :
+         dsk-path : D:/file-store/   #simple file directory
+         host : http://localhost/ #IP地址 指定文件存储的地址
+    temp-file :
+         temp-dsk-path : D:/temp-file-store/   #simple file directory
+         temp-host : http://localhost:9898/ #IP地址 指定文件存储的地址
+    url :
+         method-track-switch : true #true is on , false is off
+    kaptcha :
+         enable : true
+         header-key : _kaptcha_key
+         header-value : _kaptcha_value
+         expired-time : 60  #second
+    mock :
+         enable : true
+         header-key : _mock_enable
+    cors :
+         origins :
+              - "*"
+    jpa :
+         repoPackages :
+              - me.libme  # never set *
+              - me.libme
+    ueditor :
+         root-path : D:/file-store-ueditor/   #simple file directory
+         host : http://localhost:8901/ #IP地址 指定文件存储的地址

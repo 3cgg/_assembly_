@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug" strict="true" name="log4j2" packages="me.libme">
+    <Properties>
+        <Property name="logDir">log</Property>
+        <Property name="logFile">log.log</Property>
+    </Properties>
+    <Appenders>
+        <Appender type="Console" name="appConsole">
+            <Layout type="PatternLayout" pattern="%d %p  %c [%t] %m %n"/>
+        </Appender>
+
+        <RollingFile name="logFile" fileName="${logDir}/${logFile}" append="true"
+                     filePattern="${channelFileRoot}/${date:yyyy-MM-dd}/channelFile-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} [%t] %L %M - %msg%xEx%n"/>
+            <SizeBasedTriggeringPolicy size="5 MB"/>
+            <DefaultRolloverStrategy max="10000"/>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+        <Logger name="test" level="DEBUG" additivity="false">
+            <AppenderRef ref="appConsole"/>
+            <AppenderRef ref="logFile"/>
+        </Logger>
+        <Logger name="me.libme" level="DEBUG" additivity="false">
+            <AppenderRef ref="appConsole"/>
+            <AppenderRef ref="logFile"/>
+        </Logger>
+
+        <!-- 根logger的设置-->
+        <root>
+            <level value ="DEBUG"/>
+            <appender-ref ref="appConsole"/>
+            <AppenderRef ref="logFile"/>
+        </root>
+
+    </Loggers>
+
+</Configuration>

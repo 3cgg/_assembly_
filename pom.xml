@@ -1,0 +1,196 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>me.libme.modules</groupId>
+  <artifactId>_assembly</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>_assembly template</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-plugin-api</artifactId>
+      <version>3.0</version>
+    </dependency>
+
+    <!-- dependencies to annotations -->
+    <dependency>
+      <groupId>org.apache.maven.plugin-tools</groupId>
+      <artifactId>maven-plugin-annotations</artifactId>
+      <version>3.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+
+    <dependency>
+      <groupId>me.libme.maven.plugin</groupId>
+      <artifactId>executable-maven-plugin</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-dependency-plugin</artifactId>
+      <version>3.0.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-assembly-plugin</artifactId>
+      <version>3.0.0</version>
+    </dependency>
+  </dependencies>
+
+
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <properties>
+        <profiles.active>dev</profiles.active>
+      </properties>
+    </profile>
+    <profile>
+      <id>sit</id>
+      <properties>
+        <profiles.active>sit</profiles.active>
+      </properties>
+    </profile>
+    <profile>
+      <id>uat</id>
+      <properties>
+        <profiles.active>uat</profiles.active>
+      </properties>
+    </profile>
+    <profile>
+      <id>prd</id>
+      <properties>
+        <profiles.active>prd</profiles.active>
+      </properties>
+    </profile>
+
+  </profiles>
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+          <encoding>UTF8</encoding>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <id>make-zip</id>
+            <!-- 绑定到package生命周期阶段上 -->
+            <phase>package</phase>
+            <goals>
+              <!-- 绑定到package生命周期阶段上 -->
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <!--<descriptors> &lt;!&ndash;描述文件路径&ndash;&gt;-->
+                <!--<descriptor>src/assembly/assembly.xml</descriptor>-->
+              <!--</descriptors>-->
+              <descriptorRefs>
+                <!--<descriptorRef>jar-with-dependencies</descriptorRef>-->
+                <!--<descriptorRef>bin</descriptorRef>-->
+              </descriptorRefs>
+
+              <descriptors>
+                <descriptor>src/assembly/distribute.xml</descriptor>
+              </descriptors>
+
+              <archive>
+                <manifest>
+                  <mainClass>a.b.App</mainClass>
+                </manifest>
+              </archive>
+
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+
+      <plugin>
+        <groupId>me.libme.maven.plugin</groupId>
+        <artifactId>executable-maven-plugin</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <configuration>
+          <outputDirectory>exe-bin</outputDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+          </execution>
+
+        </executions>
+
+
+      </plugin>
+
+    </plugins>
+
+  </build>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</project>
