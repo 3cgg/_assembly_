@@ -1,19 +1,18 @@
 import sys
 import os
+from os import path
 import platform
 import string
 import copy
 
 print(platform.system())
 
-
-
-currentWorkPath=os.getcwd() #获得当前工作目录
+currentWorkPath = os.getcwd()  # 获得当前工作目录
 
 print(currentWorkPath)
 
-classPath=""
-mainClass=""
+classPath = ""
+mainClass = ""
 
 
 class Run:
@@ -22,34 +21,51 @@ class Run:
         raise NotImplemented
 
 
-class Env:
+class Env(Run):
 
     def __init__(self):
-        self.__cps=[]
+        self.__cps = []
+        self.__main_class = ""
 
     def java_home(self):
         raise NotImplemented
 
+    def java(self):
+        # return self.java_home()+"/bin/java "
+        return "java "
+
     def join_str(self):
         raise NotImplemented
 
-    def append_cp(self,*cp):
-        self.__cps.append(cp)
+    def append_cp(self, *cp):
+        self.__cps.extend(list(cp))
+
+    def main_class(self, mainClass):
+        self.__main_class = mainClass
 
     def __cp(self):
-        libPath=currentWorkPath.+"/../lib"
-        libJars=[]
+        libPath = path.dirname(currentWorkPath) + "/lib"
+        libJars = []
         try:
             for file in os.listdir(libPath):
-                libJars.append(libPath+"/"+file)
+                libJars.append(libPath + "/" + file)
         except Exception:
             raise Exception
         return libJars
 
     def cp(self):
-        self.join_str().join(copy.deepcopy(self.__cps).append(self.__cp()))
+        cps = copy.deepcopy(self.__cps);
+        cps.extend(self.__cp())
+        return self.join_str().join(cps)
 
-class Windows(Env,Run):
+    def run(self):
+        action = self.java() + " " + " -cp " + self.cp() + " " + self.__main_class
+        print(action)
+        print("-" * 80 + "-ready , running sh/bat -" + "-" * 80)
+        os.system(currentWorkPath + "/run \"" + self.cp() + "\" " + self.__main_class)
+
+
+class Windows(Env):
 
     def java_home(self):
         return "%JAVA_HOME%"
@@ -61,7 +77,7 @@ class Windows(Env,Run):
         return super().run()
 
 
-class Linux(Env,Run):
+class Linux(Env):
 
     def java_home(self):
         return "$JAVA_HOME"
@@ -73,15 +89,15 @@ class Linux(Env,Run):
         return super().run()
 
 
-
-
 def main():
     system_ = platform.system()
-    env=None
+    env = None
     if system_ == "Windows":
-        env=Windows()
+        env = Windows()
         env.append_cp("c:/work/a.jar")
+        env.main_class("me.libme._assembly_.App")
         print(env.cp())
+        env.run()
     elif system_ == "Linux":
         env = Linux()
     else:
