@@ -62,7 +62,10 @@ class Env(Run):
         action = self.java() + " " + " -cp " + self.cp() + " " + self.__main_class
         print(action)
         print("-" * 80 + "-ready , running sh/bat -" + "-" * 80)
-        os.system(currentWorkPath + "/run \"" + self.cp() + "\" " + self.__main_class)
+        os.system(self._file() + " \"" + self.cp() + "\" " + self.__main_class)
+
+    def _file(self):
+        raise NotImplemented
 
 
 class Windows(Env):
@@ -76,6 +79,8 @@ class Windows(Env):
     def run(self):
         return super().run()
 
+    def _file(self):
+        return currentWorkPath + "/run.bat "
 
 class Linux(Env):
 
@@ -87,6 +92,9 @@ class Linux(Env):
 
     def run(self):
         return super().run()
+
+    def _file(self):
+        return currentWorkPath + "/run.sh "
 
 
 def main():
